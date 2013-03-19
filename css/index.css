@@ -1,0 +1,114 @@
+/* line 3, ../sass/index.scss */
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+/* line 8, ../sass/index.scss */
+body {
+  -webkit-touch-callout: none;
+  /* prevent callout to copy image, etc when tap to hold */
+  -webkit-text-size-adjust: none;
+  /* prevent webkit from resizing text to fit */
+  -webkit-user-select: none;
+  /* prevent copy paste, to allow, change 'none' to 'text' */
+  background-color: black;
+  color: white;
+  font-family: "HelveticaNeue-Light", "HelveticaNeue", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  text-transform: uppercase;
+  width: 100%; }
+
+/* Portrait layout (default) */
+/* line 24, ../sass/index.scss */
+.container {
+  position: relative;
+  width: 640px;
+  height: 960px;
+  -webkit-perspective: 960px;
+  -webkit-perspective-origin: 50% 50%;
+  background-color: white;
+  overflow: hidden;
+  background-color: black; }
+
+/* line 34, ../sass/index.scss */
+#cube {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform: translateZ(-320px) rotateY(0deg);
+  -webkit-transition: all 0.3s ease-in-out; }
+
+/* line 42, ../sass/index.scss */
+.face {
+  position: absolute;
+  width: 640px;
+  height: 960px;
+  text-align: center;
+  padding: 280px 0 0;
+  margin: 0;
+  -webkit-backface-visibility: hidden;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  border-radius: 20px; }
+
+/* line 52, ../sass/index.scss */
+.front {
+  background-color: #e42900;
+  -webkit-transform: rotateY(0deg) translateZ(320px); }
+
+/* line 53, ../sass/index.scss */
+.right {
+  background-color: #6ea013;
+  -webkit-transform: rotateY(90deg) translateZ(320px); }
+
+/* line 54, ../sass/index.scss */
+.left {
+  background-color: #70083e;
+  -webkit-transform: rotateY(-90deg) translateZ(320px); }
+
+/* line 55, ../sass/index.scss */
+.back {
+  background-color: #5c97ff;
+  -webkit-transform: rotateY(180deg) translateZ(320px); }
+
+/* Landscape layout (with min-width) */
+@media screen and (min-aspect-ratio: 1 / 1) and (min-height: 1136px) {
+  /* line 59, ../sass/index.scss */
+  .container, .face {
+    height: 1136px; } }
+/* line 62, ../sass/index.scss */
+h1 {
+  font-size: 24px;
+  font-weight: normal;
+  margin: 0px;
+  overflow: visible;
+  padding: 0px;
+  text-align: center; }
+
+/* line 71, ../sass/index.scss */
+.event {
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  color: #FFFFFF;
+  font-size: 12px;
+  margin: 0px 30px;
+  padding: 2px 0px; }
+
+/* line 80, ../sass/index.scss */
+.event.listening {
+  background-color: #333333;
+  display: block; }
+
+/* line 85, ../sass/index.scss */
+.event.received {
+  background-color: black;
+  display: none; }

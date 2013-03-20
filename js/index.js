@@ -19,10 +19,7 @@
     var cube = document.getElementById('cube'),
         cubeYstate = 0;
 
-    // regexp pattern to handle rotateY
-    var pattern = /rotateY\(([0-9]+[.0-9]*)deg\)/;
-
-    // when everything gets ready we can add event handlers
+    // when everything gets ready we can set event handlers
     window.addEventListener('load',function(){
 
         console.log( 'LOG:', 'ready' );
@@ -41,27 +38,37 @@
 
     }, false);
 
-    // we have to store which side of the cube is facing us
+    // stores which side of the cube is facing us
     var storeCubeState = function() {
+        var pattern = /rotateY\((-?[0-9]+[.0-9]*)deg\)/; // regexp pattern to get the value of rotateY transform
         var match = cube.style.webkitTransform.match(pattern);
         cubeYstate = parseFloat( match ? match[1] : 0 );
-        console.log( 'cubeYstate', cubeYstate );
+        console.log( 'cubeYstate:', cubeYstate );
     };
 
+    // stores the starting coords and push back the cube because it's fancy :)
     var onPointerDown = function( e ) {
         pointer.originX = e.pageX;
         pointer.on = true;
-        document.getElementById('cube').style.webkitTransition = "none";
-        // cube.style.webkitTransition = "all .3s cubic-bezier( 0,1.2,.75,1.5 )";
         cube.style.webkitTransform = "translateZ(-420px) rotateY( " + cubeYstate + "deg )";
+        cube.style.webkitTransition = "none";
     };
 
+    // calculating degree of the Y axis and rotating the cube
+    var onRotate = function( e ) {
+        if ( pointer.on === true ) {
+            pointer.deltaX = e.pageX - pointer.originX;
+            pointer.rotateYdeg = 90 / 640 * pointer.deltaX;
+            cube.style.webkitTransform = "translateZ(-420px) rotateY( " + ( cubeYstate + pointer.rotateYdeg ) + "deg )";
+        }
+    };
+
+    // after the cube has released it should be rotating back to the nearest side
     var onPointerUp = function() {
         cube.style.webkitTransition = "all .3s cubic-bezier( 0,1.2,.75,1.5 )";
-        var match = cube.style.webkitTransform.match(pattern);
-        if ( match !== null && match[1] > 45 ) {
+        if ( pointer.rotateYdeg > 30 ) {
             cube.style.webkitTransform = "translateZ(-320px) rotateY( " + ( cubeYstate + 90 ) + "deg )";
-        } else if ( match !== null && match[1] < -45 ) {
+        } else if ( pointer.rotateYdeg < -30 ) {
             cube.style.webkitTransform = "translateZ(-320px) rotateY( " + ( cubeYstate - 90 ) + "deg )";
         } else {
             cube.style.webkitTransform = "translateZ(-320px) rotateY( " + cubeYstate + "deg )";
@@ -70,15 +77,10 @@
         pointer = {
             deltaX: 0,
             originX: 0,
+            rotateYdeg: 0,
             on: false
         };
     };
 
-    var onRotate = function( e ) {
-        if ( pointer.on === true ) {
-            pointer.deltaX = e.pageX - pointer.originX;
-            cube.style.webkitTransform = "translateZ(-420px) rotateY( " + ( cubeYstate + 90 / 640 * pointer.deltaX ) + "deg )";
-        }
-    };
 
 })(window);

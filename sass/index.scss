@@ -37,7 +37,7 @@ body {
     height: 100%;
     -webkit-transform-style: preserve-3d;
     -webkit-transform: translateZ(-320px) rotateY(0deg);
-    -webkit-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s cubic-bezier( 0,1.2,.75,1.5 );
 }
 .face {
     position: absolute;

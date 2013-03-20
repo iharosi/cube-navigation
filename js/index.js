@@ -3,7 +3,7 @@
     "use strict";
 
     var document = window.document,
-        console = window.console || {};
+        console = window.console || { log: function(){} };
 
     // Is this a touchable device?
     var touchable = 'createTouch' in document;
@@ -25,6 +25,7 @@
         console.log( 'LOG:', 'ready' );
 
         if (touchable) {
+            // window.addEventListener("deviceorientation", function(){}, false);
             document.addEventListener('touchmove', onRotate, false);
             document.addEventListener('touchstart', onPointerDown, false);
             document.addEventListener('touchend', onPointerUp, false);
@@ -40,7 +41,7 @@
 
     // stores which side of the cube is facing us
     var storeCubeState = function() {
-        var pattern = /rotateY\((-?[0-9]+[.0-9]*)deg\)/; // regexp pattern to get the value of rotateY transform
+        var pattern = /rotateY\(([+\-]?[0-9]+(?:\.[0-9]+)?)deg\)/; // regexp pattern to get the value of rotateY transform
         var match = cube.style.webkitTransform.match(pattern);
         cubeYstate = parseFloat( match ? match[1] : 0 );
         console.log( 'cubeYstate:', cubeYstate );
@@ -50,7 +51,7 @@
     var onPointerDown = function( e ) {
         pointer.originX = e.pageX;
         pointer.on = true;
-        cube.style.webkitTransform = "translateZ(-420px) rotateY( " + cubeYstate + "deg )";
+        cube.style.webkitTransform = "translateZ(-160px) rotateY( " + cubeYstate + "deg )";
         cube.style.webkitTransition = "none";
     };
 
@@ -58,20 +59,21 @@
     var onRotate = function( e ) {
         if ( pointer.on === true ) {
             pointer.deltaX = e.pageX - pointer.originX;
-            pointer.rotateYdeg = 90 / 640 * pointer.deltaX;
-            cube.style.webkitTransform = "translateZ(-420px) rotateY( " + ( cubeYstate + pointer.rotateYdeg ) + "deg )";
+            pointer.rotateYdeg = 90 / parseInt( document.getElementById("wrapper").offsetWidth, 10 ) * pointer.deltaX;
+            cube.style.webkitTransform = "translateZ(-160px) rotateY( " + ( cubeYstate + pointer.rotateYdeg ) + "deg )";
         }
+        e.preventDefault();
     };
 
     // after the cube has released it should be rotating back to the nearest side
     var onPointerUp = function() {
-        cube.style.webkitTransition = "all .3s cubic-bezier( 0,1.2,.75,1.5 )";
-        if ( pointer.rotateYdeg > 30 ) {
-            cube.style.webkitTransform = "translateZ(-320px) rotateY( " + ( cubeYstate + 90 ) + "deg )";
-        } else if ( pointer.rotateYdeg < -30 ) {
-            cube.style.webkitTransform = "translateZ(-320px) rotateY( " + ( cubeYstate - 90 ) + "deg )";
+        cube.style.webkitTransition = "all .3s ease-out";
+        if ( pointer.rotateYdeg > 20 ) {
+            cube.style.webkitTransform = "translateZ(-160px) rotateY( " + ( cubeYstate + 90 ) + "deg )";
+        } else if ( pointer.rotateYdeg < -20 ) {
+            cube.style.webkitTransform = "translateZ(-160px) rotateY( " + ( cubeYstate - 90 ) + "deg )";
         } else {
-            cube.style.webkitTransform = "translateZ(-320px) rotateY( " + cubeYstate + "deg )";
+            cube.style.webkitTransform = "translateZ(-160px) rotateY( " + cubeYstate + "deg )";
         }
         storeCubeState();
         pointer = {
